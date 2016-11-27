@@ -1,0 +1,18 @@
+{
+  "name": "easy-streamer-server",
+  "version": "1.0.0",
+  "description": "API to command a raspberry pi to play twitch streams through omxplayer. Requires streamlink.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "itbrandonsilva",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.1.4",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "ps-tree": "^1.1.0"
+  }
+}
