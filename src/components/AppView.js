@@ -89,7 +89,7 @@ class AppView extends Component {
                     onClose={this.props.close}
                     tapToClose={true}
                     panCloseMask={0.65}
-                    panOpenMask={0.2}
+                    panOpenMask={0.8}
                     >
                         <AppViewContent />
                 </Drawer>

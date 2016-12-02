@@ -1,6 +1,6 @@
 import * as NetworkInfo from 'react-native-network-info';
-import * as async from 'async';
 import * as superagent from 'superagent';
+import * as Rx from 'rxjs';
 
 export const SERVICE_PORT = 6324;
 export const SERVICE_PATH = '/estream/scan';
@@ -14,7 +14,7 @@ class Network {
 
     heartbeat(url) {
         return new Promise((resolve, reject) => {
-            superagent.get(url).timeout(250).end((err, res) => {
+            superagent.get(url).timeout(500).end((err, res) => {
                 let resText = res ? res.text : null;
 
                 if (err || resText !== 'estream-ready') return reject();
@@ -33,42 +33,25 @@ class Network {
                 let discovered;
                 let oct4 = 1;
  
-                async.doUntil(
-                    (cb) => {
-                        let targetIp = baseIp + oct4;
-                        let url = 'http://' + targetIp + ':' + SERVICE_PORT + '/estream/discover';
-                        this.heartbeat(url).then(
-                            () => { discovered = targetIp; cb(); },
-                            () => { oct4++; cb(); }
-                        );
-                    },
-                    () => discovered || oct4 > 30,
-                    err => {
-                        if (err) throw err;
-                        //resolve('192.168.1.19');
-                        resolve(discovered);
-                    }
-                );
-                
+                let discover = Rx.Observable.create(subscriber => {
+                    let targetIp = baseIp + oct4;
+                    let url = 'http://' + targetIp + ':' + SERVICE_PORT + '/estream/discover';
+                    this.heartbeat(url).then(
+                        () => { subscriber.next(targetIp); subscriber.complete(); },
+                        () => {
+                            oct4++;
+                            if (oct4 < 30) subscriber.error();
+                            else {
+                                subscriber.next(null);
+                                subscriber.complete();
+                            }
+                        }
+                    );
+                }).retry().last();
+
+                discover.subscribe(discover => resolve(discover));
             });
         });
-
-           /*let scanResults$ = Rx.Observable.while(
-                () => !discovered || oct4 >= 255,
-                Rx.Observable.create(observer => {
-                    let targetIp = baseIp + oct4;
-                    fetch('http://' +  + ':' + service_port + '/').then(
-                        () => { discovered = targetip; observer.complete(); },
-                        () => { ++oct4; observer.complete(); }
-                    );
-                })
-            );
-
-            scanResults$.subscribe({
-                complete: () => {
-                    alert(oct4 + ' ' + discovered);
-                },
-            });*/
     }
 
     watchStream(host, streamName, quality, cb) {

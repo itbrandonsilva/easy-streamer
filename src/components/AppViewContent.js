@@ -34,10 +34,10 @@ class AppViewContent extends Component {
 
         return (
             <View style={{flex: 1}}>
-                <View style={{height: 50, alignSelf: 'stretch', backgroundColor: '#6441a4', paddingLeft: 20}}>
+                <View style={{height: 50, alignSelf: 'stretch', backgroundColor: '#6441a4'}}>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
-                        <Icon name={'bars'} color={'#ffffff'} type={'font-awesome'} onPress={this.props.toggleDrawer} underlayColor='#6441a4' />
-                        <View style={{flex: 1, paddingLeft: 20, paddingRight: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <Icon name={'bars'} containerStyle={{paddingLeft: 10, paddingRight: 10, width: 50, height: 50}} color={'#ffffff'} type={'font-awesome'} onPress={this.props.toggleDrawer} underlayColor='#6441a4' />
+                        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                             <Text style={{color: '#ffffff'}}>{ viewTitle }</Text>
                             { ! this.props.hostAvailable ? ( <Icon name={'exclamation-triangle'} type={'font-awesome'} color={'#ff0000'} onPress={this.props.navToSettings} underlayColor={'#6441a4'} /> ) : null }
                         </View>

@@ -26,7 +26,7 @@ class StreamCard extends Component {
         let stream = this.props.stream;
         return (
             <Card
-                title={stream.channel.name + ' ( ' + stream.viewers + ' Viewers)'}
+                title={stream.channel.name + ' - ' + stream.game + ' (' + stream.viewers + ' Viewers)'}
                 //image={require('./github.png')}
                 image={{uri: stream.preview.large}}
                 imageStyle={{resizeMode: 'contain'}}>
